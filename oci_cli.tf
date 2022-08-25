@@ -38,5 +38,5 @@ resource "kubernetes_secret" "terraform_cloud" {
       "kubernetes.io/service-account.name" = kubernetes_service_account.terraform_cloud.metadata.name
     }
   }
-  type: kubernetes.io/service-account-token
+  type = "kubernetes.io/service-account-token"
 }
