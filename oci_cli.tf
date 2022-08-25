@@ -24,7 +24,7 @@ output "token" {
   value = module.oci_cli.oci_cli_command_outputs
 }
 output "kubeconfig" {
-  value = data.oci_containerengine_cluster_kube_config.test_oke_kubeconfig.content
+  value = yamldecode(data.oci_containerengine_cluster_kube_config.test_oke_kubeconfig.content)
 }
   
 provider "kubernetes" {
