@@ -32,10 +32,10 @@ resource "kubernetes_service_account" "terraform_cloud" {
 
 resource "kubernetes_secret" "terraform_cloud" {
   metadata {
-    name = "${kubernetes_service_account.terraform_cloud.metadata.name}-token"
-    namespace = kubernetes_service_account.terraform_cloud.metadata.namespace
+    name = "${kubernetes_service_account.terraform_cloud.metadata[0].name}-token"
+    namespace = kubernetes_service_account.terraform_cloud.metadata[0].namespace
     annotations = {
-      "kubernetes.io/service-account.name" = kubernetes_service_account.terraform_cloud.metadata.name
+      "kubernetes.io/service-account.name" = kubernetes_service_account.terraform_cloud.metadata[0].name
     }
   }
   type = "kubernetes.io/service-account-token"
