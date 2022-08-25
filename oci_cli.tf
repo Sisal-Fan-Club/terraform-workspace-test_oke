@@ -25,7 +25,7 @@ data "oci_containerengine_cluster_kube_config" "test_oke_kubeconfig" {
 
 resource "kubernetes_service_account" "terraform_cloud" {
   metadata {
-    name = "terraform_cloud"
+    name = "terraform-cloud"
     namespace = "kube-system"
   }
 }
