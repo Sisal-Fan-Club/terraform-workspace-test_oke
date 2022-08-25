@@ -11,3 +11,7 @@ module "oci_cli" {
     generate_token = "ce cluster generate-token --cluster-id ${local.test_oke.id} --region ${var.oci_region_name}"
   }
 }
+  
+output "token" {
+  value = module.oci_cli.outputs.oci_cli_command_outputs
+}
