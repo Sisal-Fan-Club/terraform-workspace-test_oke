@@ -20,11 +20,16 @@ resource "oci_containerengine_cluster" "test_oke" {
     is_public_ip_enabled = true
   }
   
-  service_lb_subnet_ids = [
-    local.dmz_subnet.id
-  ]
-  service_lb_config {
-    freeform_tags = merge({
-    }, local.dmz_subnet.freeform_tags, local.vcn.freeform_tags, local.test_compartment.freeform_tags)
+  options {
+    service_lb_subnet_ids = [
+      local.dmz_subnet.id
+    ]
+    service_lb_config {
+      freeform_tags = merge({
+      }, local.dmz_subnet.freeform_tags, local.vcn.freeform_tags, local.test_compartment.freeform_tags)
+    }
   }
+  
+  freeform_tags = merge({
+  }, local.test_compartment.freeform_tags)
 }
