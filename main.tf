@@ -55,3 +55,11 @@ provider "oci" {
   
   region = data.oci_identity_regions.home.regions[0].name
 }
+
+# Kubernetes
+provider "kubernetes" {
+  host = local.oke_test_endpoint
+  
+  token = local.oke_test_token
+  cluster_ca_certificate = local.oke_test_cert_authority 
+}
