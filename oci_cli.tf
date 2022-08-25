@@ -1,5 +1,5 @@
 locals {
-  oke_test_token = coalesce(try(kubernetes_secret.terraform_cloud.data.token, ""), module.oci_cli.oci_cli_command_outputs.generate_token.status.token)
+  oke_test_token = module.oci_cli.oci_cli_command_outputs.generate_token.status.token
     
   oke_test_kubeconfig = yamldecode(data.oci_containerengine_cluster_kube_config.test_oke_kubeconfig.content)
   oke_test_cert_authority = base64decode(local.oke_test_kubeconfig.clusters[0].cluster.certificate-authority-data)
