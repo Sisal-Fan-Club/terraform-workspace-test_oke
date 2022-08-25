@@ -32,7 +32,7 @@ provider "kubernetes" {
   host = local.oke_test_kubeconfig.clusters[0].cluster.server 
   
   token = local.oke_test_token
-  cluster_ca_certificate = local.oke_test_kubeconfig.clusters[0].cluster.certificate-authority-data
+  cluster_ca_certificate = base64decode(local.oke_test_kubeconfig.clusters[0].cluster.certificate-authority-data)
   
 }
   
