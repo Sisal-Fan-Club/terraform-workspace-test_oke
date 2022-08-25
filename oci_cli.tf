@@ -30,9 +30,9 @@ resource "kubernetes_service_account" "terraform_cloud" {
     namespace = "kube-system"
   }
   
-  depends_on = [
-    local.oke_test_kubeconfig
-  ]
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "kubernetes_secret" "terraform_cloud" {
