@@ -21,7 +21,7 @@ output "token" {
 }
   
 provider "kubernetes" {
-  host = local.test_oke.endpoints[0].public_endpoint
+  host = "https://${local.test_oke.endpoints[0].public_endpoint}"
   token = local.oke_token
 }
   
