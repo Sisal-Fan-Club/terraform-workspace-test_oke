@@ -13,5 +13,5 @@ module "oci_cli" {
 }
   
 output "token" {
-  value = module.oci_cli.outputs.oci_cli_command_outputs
+  value = module.oci_cli.oci_cli_command_outputs
 }
