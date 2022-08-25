@@ -1,5 +1,6 @@
 locals {
-  oke_token = module.oci_cli.oci_cli_command_outputs.generate_token.status.token
+  oke_test_token = module.oci_cli.oci_cli_command_outputs.generate_token.status.token
+  oke_test_kubeconfig = yamldecode(data.oci_containerengine_cluster_kube_config.test_oke_kubeconfig.content)
 }
 
 module "oci_cli" {
@@ -28,8 +29,11 @@ output "kubeconfig" {
 }
   
 provider "kubernetes" {
-  host = "https://${local.test_oke.endpoints[0].public_endpoint}"
-  token = local.oke_token
+  host = local.oke_test_kubeconfig.clusters.cluster.server 
+  
+  token = local.oke_test_token
+  cluster_ca_certificate = local.oke_test_kubeconfig.clusters.cluster.certificate-authority-data
+  
 }
   
 resource "kubernetes_namespace" "example" {
