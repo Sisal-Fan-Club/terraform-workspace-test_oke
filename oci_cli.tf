@@ -29,10 +29,6 @@ resource "kubernetes_service_account" "terraform_cloud" {
     name = "terraform-cloud"
     namespace = "kube-system"
   }
-  
-  lifecycle {
-    ignore_changes = all
-  }
 }
 
 resource "kubernetes_secret" "terraform_cloud" {
