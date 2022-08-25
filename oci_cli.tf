@@ -29,6 +29,10 @@ resource "kubernetes_service_account" "terraform_cloud" {
     name = "terraform-cloud"
     namespace = "kube-system"
   }
+  
+  depends_on = [
+    local.oke_test_kubeconfig
+  ]
 }
 
 resource "kubernetes_secret" "terraform_cloud" {
