@@ -12,7 +12,7 @@ resource "oci_containerengine_cluster" "test_oke" {
   compartment_id = local.test_compartment.id
   vcn_id = local.vcn.id
   
-  name = "Sisal Fan Club - Cluster OKE - Test Environment"
+  name = "oke-${local.test_compartment.name}"
   kubernetes_version = "v1.24.1"
   
   endpoint_config {
