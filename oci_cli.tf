@@ -22,3 +22,21 @@ module "oci_cli" {
 data "oci_containerengine_cluster_kube_config" "test_oke_kubeconfig" {
   cluster_id = local.test_oke.id
 }
+
+resource "kubernetes_service_account" "terraform_cloud" {
+  metadata {
+    name = "terraform_cloud"
+    namespace = "kube-system"
+  }
+}
+
+resource "kubernetes_secret" "terraform_cloud" {
+  metadata {
+    name = "${kubernetes_service_account.terraform_cloud.metadata.name}-token"
+    namespace = kubernetes_service_account.terraform_cloud.metadata.namespace
+    annotations = {
+      "kubernetes.io/service-account.name" = kubernetes_service_account.terraform_cloud.metadata.name
+    }
+  }
+  type: kubernetes.io/service-account-token
+}
