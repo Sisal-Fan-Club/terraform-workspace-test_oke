@@ -17,7 +17,7 @@ module "oci_cli" {
 }
 
 data "oci_containerengine_cluster_kube_config" "test_oke_kubeconfig" {
-  cluster_id = test_oke.id
+  cluster_id = local.test_oke.id
 }
 
 output "token" {
