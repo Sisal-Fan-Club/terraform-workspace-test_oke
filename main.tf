@@ -59,7 +59,7 @@ provider "oci" {
 # Kubernetes
 provider "kubernetes" {
   host = local.oke_test_endpoint
-  
-  token = local.oke_test_token
+
+  token = coalesce(try(kubernetes_secret.terraform_cloud.data.token, ""), local.oke_test_token)
   cluster_ca_certificate = local.oke_test_cert_authority 
 }
