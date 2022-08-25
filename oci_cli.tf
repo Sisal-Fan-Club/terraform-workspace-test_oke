@@ -1,3 +1,7 @@
+locals {
+  oke_token = module.oci_cli.oci_cli_command_outputs.generate_token.status.token
+}
+
 module "oci_cli" {
   source = "github.com/Terraform-Modules-Lib/terraform-oci-cli"
   
@@ -14,4 +18,15 @@ module "oci_cli" {
   
 output "token" {
   value = module.oci_cli.oci_cli_command_outputs
+}
+  
+provider "kubernetes" {
+  host = local.test_oke.endpoints[0].public_endpoint
+  token = local.oke_token
+}
+  
+resource "kubernetes_namespace" "example" {
+  metadata {
+    name = "my-first-namespace"
+  }
 }
