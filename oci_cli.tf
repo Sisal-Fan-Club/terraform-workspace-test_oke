@@ -1,4 +1,4 @@
-module "servers" {
+module "oci_cli" {
   source = "github.com/Terraform-Modules-Lib/terraform-oci-cli"
   
   oci_tenancy_id = var.oci_tenancy_id
@@ -8,6 +8,6 @@ module "servers" {
   oci_region_name = var.oci_region_name
   
   commands = {
-    generate_token = "ce cluster generate-token --cluster-id ${local.test_oke} --region ${var.oci_region_name}"
+    generate_token = "ce cluster generate-token --cluster-id ${local.test_oke.id} --region ${var.oci_region_name}"
   }
 }
