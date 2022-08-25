@@ -15,9 +15,16 @@ module "oci_cli" {
     generate_token = "ce cluster generate-token --cluster-id ${local.test_oke.id} --region ${var.oci_region_name}"
   }
 }
-  
+
+data "oci_containerengine_cluster_kube_config" "test_oke_kubeconfig" {
+  cluster_id = test_oke.id
+}
+
 output "token" {
   value = module.oci_cli.oci_cli_command_outputs
+}
+output "kubeconfig" {
+  value = data.oci_containerengine_cluster_kube_config.test_oke_kubeconfig.content
 }
   
 provider "kubernetes" {
