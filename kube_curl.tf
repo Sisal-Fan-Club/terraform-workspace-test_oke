@@ -86,7 +86,7 @@ data "local_sensitive_file" "terraform_secret" {
 provider "kubernetes" {
   host = local.oke_test_endpoint
   
-  token = base64decode(local.terraform_secret.data.token)
+  token = base64decode(local.terraform_secret.data[0].token)
   insecure = true
 }
 
