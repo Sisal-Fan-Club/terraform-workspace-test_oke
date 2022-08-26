@@ -37,10 +37,16 @@ resource "local_file" "test_oke_ca" {
 
 resource "null_resource" "create_terraform_user" {
   triggers = {
-    cmd_create_service_account = "curl -X POST '${local.oke_test_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/serviceaccounts' --insecure --header 'Authorization: Bearer ${local.oke_test_token}' --header 'Content-Type: application/json' --data '{\"apiVersion\": \"v1\",\"kind\": \"ServiceAccount\",\"metadata\": {\"name\": \"${local.terraform_user_name}\"}}'"   
+    test_oke_endpoint = local.oke_test_endpoint
+    
+    kubecurl = "curl --insecure --header 'Authorization: Bearer ${local.oke_test_token}' --header 'Content-Type: application/json'"
+    kube_serviceaccount = "{\"apiVersion\": \"v1\",\"kind\": \"ServiceAccount\",\"metadata\": {\"name\": \"${local.terraform_user_name}\"}}"
+    
+    #cmd_create_service_account = "curl -X POST '${local.oke_test_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/serviceaccounts' --insecure --header 'Authorization: Bearer ${local.oke_test_token}' --header 'Content-Type: application/json' --data '{\"apiVersion\": \"v1\",\"kind\": \"ServiceAccount\",\"metadata\": {\"name\": \"${local.terraform_user_name}\"}}'"   
   }
   
   provisioner "local-exec" {
-    command = "${self.triggers.cmd_create_service_account}"
+    #command = "${self.triggers.cmd_create_service_account}"
+    command = "${self.triggers.kubecurl} -X POST '${self.triggers.test_oke_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/serviceaccounts' --data '${self.triggers.kube_serviceaccount}'"
   }
 }
