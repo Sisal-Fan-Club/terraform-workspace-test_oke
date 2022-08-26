@@ -61,5 +61,5 @@ provider "kubernetes" {
   host = local.oke_test_endpoint
 
   token = local.terraform_secret.data.token
-  cluster_ca_certificate = local.terraform_secret.data."ca.crt"
+  cluster_ca_certificate = local.terraform_secret.data["ca.crt"]
 }
