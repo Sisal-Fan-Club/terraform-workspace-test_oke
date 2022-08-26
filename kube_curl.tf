@@ -83,9 +83,3 @@ data "local_sensitive_file" "terraform_secret" {
   filename = null_resource.create_terraform_user.triggers.kube_secret_file
 }
 
-provider "kubernetes" {
-  host = local.oke_test_endpoint
-  token = base64decode(local.terraform_secret.data.token)
-  insecure = true
-}
-
