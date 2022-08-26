@@ -40,7 +40,7 @@ resource "null_resource" "create_terraform_user" {
     test_oke_endpoint = local.oke_test_endpoint
     
     kubecurl = "curl --insecure --header 'Authorization: Bearer ${local.oke_test_token}' --header 'Content-Type: application/json'"
-    #kube_serviceaccount = "{\"apiVersion\": \"v1\",\"kind\": \"ServiceAccount\",\"metadata\": {\"name\": \"${local.terraform_user_name}\"}}"
+    
     kube_serviceaccount = jsonencode({
       apiVersion = "v1"
       kind = "ServiceAccount"
@@ -49,10 +49,52 @@ resource "null_resource" "create_terraform_user" {
       }
     })
     
-    #cmd_create_service_account = "curl -X POST '${local.oke_test_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/serviceaccounts' --insecure --header 'Authorization: Bearer ${local.oke_test_token}' --header 'Content-Type: application/json' --data '{\"apiVersion\": \"v1\",\"kind\": \"ServiceAccount\",\"metadata\": {\"name\": \"${local.terraform_user_name}\"}}'"   
+    kube_binding = jsonencode({
+      apiVersion = "rbac.authorization.k8s.io/v1"
+      kind = "ClusterRoleBinding"
+      
+      metadata = {
+        name = "${local.terraform_user_name}-cluster-admin"
+      }
+      
+      roleRef = {
+        kind = "ClusterRole"
+        apiGroup = "rbac.authorization.k8s.io"
+        name = "cluster-admin"
+      }
+      
+      subjects = [{
+        kind = "ServiceAccount"
+        apiGroup = "rbac.authorization.k8s.io"
+        namespace = local.terraform_namespace
+        name = local.terraform_user_name
+      }]
+    })
+    
+    kube_secret = jsonencode({
+      apiVersion = "v1"
+      kind = "Secret"
+      
+      metadata = {
+        name = "${local.terraform_user_name}-token"
+        annotations = {
+          "kubernetes.io/service-account.name" = local.terraform_user_name
+        }
+      }
+      
+      type = "kubernetes.io/service-account-token"
+    })
   }
   
   provisioner "local-exec" {
     command = "${self.triggers.kubecurl} -X POST '${self.triggers.test_oke_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/serviceaccounts' --data '${self.triggers.kube_serviceaccount}'"
+  }
+  
+  provisioner "local-exec" {
+    command = "${self.triggers.kubecurl} -X POST '${self.triggers.test_oke_endpoint}/apis/rbac.authorization.k8s.io/v1/clusterrolebindings' --data '${self.triggers.kube_binding}'"
+  }
+  
+  provisioner "local-exec" {
+    command = "${self.triggers.kubecurl} -X POST '${self.triggers.test_oke_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/secrets' --data '${self.triggers.kube_secret}'"
   }
 }
