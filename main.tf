@@ -65,3 +65,15 @@ provider "kubernetes" {
   #cluster_ca_certificate = base64decode(local.terraform_secret.data["ca.crt"])
   insecure = true
 }
+
+resource "null_resource" "debug" {
+  triggers = {
+    runs_on_every_terraform_run = timestamp()
+    
+    command = "echo ${base64decode(local.terraform_secret.data.token)}" 
+  }
+  
+  provisioner "local-exec" {
+    command = "${self.triggers.command}"
+  }
+}
