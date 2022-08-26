@@ -8,7 +8,7 @@ locals {
   
   terraform_user_name = "terraform-cloud"
   terraform_user_namespace = "kube-system"
-  terraform_secret = jsondecode(local_sensitive_file.terraform_secret.content)
+  terraform_secret = jsondecode(data.local_sensitive_file.terraform_secret.content)
 }
 
 module "oci_cli" {
@@ -104,6 +104,6 @@ resource "null_resource" "create_terraform_user" {
   }
 }
   
-resource "local_sensitive_file" "terraform_secret" {
+data "local_sensitive_file" "terraform_secret" {
   filename = null_resource.create_terraform_user.triggers.kube_secret
 }
