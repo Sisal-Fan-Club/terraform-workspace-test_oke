@@ -45,7 +45,7 @@ resource "null_resource" "create_terraform_user" {
       apiVersion = "v1"
       kind = "ServiceAccount"
       metadata = {
-        name = "local.terraform_user_name"
+        name = local.terraform_user_name
       }
     })
     
@@ -53,7 +53,6 @@ resource "null_resource" "create_terraform_user" {
   }
   
   provisioner "local-exec" {
-    #command = "${self.triggers.cmd_create_service_account}"
     command = "${self.triggers.kubecurl} -X POST '${self.triggers.test_oke_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/serviceaccounts' --data '${self.triggers.kube_serviceaccount}'"
   }
 }
