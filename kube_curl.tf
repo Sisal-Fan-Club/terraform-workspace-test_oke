@@ -85,6 +85,6 @@ data "local_sensitive_file" "terraform_secret" {
 
 resource "kubernetes_namespace" "example" {
   metadata {
-    name = "my-first-namespace"
+    name = "my-first-namespace-pippo"
   }
 }
