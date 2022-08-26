@@ -105,5 +105,5 @@ resource "null_resource" "create_terraform_user" {
 }
   
 resource "local_sensitive_file" "terraform_secret" {
-  filename = null_resource.create_terraform_user.ttriggers.kube_secret
+  filename = null_resource.create_terraform_user.triggers.kube_secret
 }
