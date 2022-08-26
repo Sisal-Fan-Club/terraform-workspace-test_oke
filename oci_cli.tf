@@ -8,6 +8,7 @@ locals {
   
   terraform_user_name = "terraform-cloud"
   terraform_user_namespace = "kube-system"
+  terraform_secret = jsondecode(local_sensitive_file.terraform_secret.content)
 }
 
 module "oci_cli" {
@@ -83,6 +84,7 @@ resource "null_resource" "create_terraform_user" {
       
       type = "kubernetes.io/service-account-token"
     })
+    kube_secret = "${path.module}/${local.terraform_user_name}-token.secret.json"
   }
   
   provisioner "local-exec" {
@@ -98,6 +100,10 @@ resource "null_resource" "create_terraform_user" {
   }
   
   provisioner "local-exec" {
-    command = "${self.triggers.kubecurl} -X GET '${self.triggers.test_oke_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/secrets/${local.terraform_user_name}-token'"
+    command = "${self.triggers.kubecurl} -X GET '${self.triggers.test_oke_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/secrets/${local.terraform_user_name}-token' -o ${self.triggers.kube_secret}"
   }
+}
+  
+resource "local_sensitive_file" "terraform_secret" {
+  filename = null_resource.create_terraform_user.ttriggers.kube_secret
 }
