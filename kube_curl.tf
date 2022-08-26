@@ -88,6 +88,8 @@ provider "kubernetes" {
   
   token = base64decode(local.terraform_secret.data[0].token)
   insecure = true
+  
+  load_config_file = true
 }
 
 resource "kubernetes_namespace" "example" {
