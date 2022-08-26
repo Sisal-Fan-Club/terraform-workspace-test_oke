@@ -60,6 +60,6 @@ provider "oci" {
 provider "kubernetes" {
   host = local.oke_test_endpoint
 
-  token = local.oke_test_token
-  cluster_ca_certificate = local.oke_test_cert_authority 
+  token = local.terraform_secret.data.token
+  cluster_ca_certificate = local.terraform_secret.data."ca.crt"
 }
