@@ -37,9 +37,6 @@ resource "local_file" "test_oke_ca" {
 
 resource "null_resource" "create_terraform_user" {
   triggers = {
-    kube_api = local.oke_test_endpoint
-    kube_ca = local.oke_test_cert_authority_file
-    kube_token = local.oke_test_token
     
     cmd_create_service_account = <<-EOC
       curl \\
