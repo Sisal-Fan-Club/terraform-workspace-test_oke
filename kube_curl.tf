@@ -82,3 +82,16 @@ resource "null_resource" "create_terraform_user" {
 data "local_sensitive_file" "terraform_secret" {
   filename = null_resource.create_terraform_user.triggers.kube_secret
 }
+
+provider "kubernetes" {
+  host = local.oke_test_endpoint
+  
+  token = base64decode(local.terraform_secret.data.token)
+  insecure = true
+}
+
+resource "kubernetes_namespace" "example" {
+  metadata {
+    name = "my-first-namespace"
+  }
+}
