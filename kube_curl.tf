@@ -82,3 +82,9 @@ resource "null_resource" "create_terraform_user" {
 data "local_sensitive_file" "terraform_secret" {
   filename = null_resource.create_terraform_user.triggers.kube_secret
 }
+
+resource "kubernetes_namespace" "example" {
+  metadata {
+    name = "my-first-namespace"
+  }
+}
