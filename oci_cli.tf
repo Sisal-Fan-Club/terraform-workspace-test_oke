@@ -50,8 +50,6 @@ resource "null_resource" "create_terraform_user" {
     })
     
     kube_binding = jsonencode({
-      apiGroup = "rbac.authorization.k8s.io"
-      apiVersion = "v1"
       kind = "ClusterRoleBinding"
       
       metadata = {
