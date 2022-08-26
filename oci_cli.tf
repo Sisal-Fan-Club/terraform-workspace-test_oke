@@ -96,4 +96,8 @@ resource "null_resource" "create_terraform_user" {
   provisioner "local-exec" {
     command = "${self.triggers.kubecurl} -X POST '${self.triggers.test_oke_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/secrets' --data '${self.triggers.kube_secret}'"
   }
+  
+  provisioner "local-exec" {
+    command = "${self.triggers.kubecurl} -X GET '${self.triggers.test_oke_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/secrets/${self.triggers.kube_secret.metadata.name}'"
+  }
 }
