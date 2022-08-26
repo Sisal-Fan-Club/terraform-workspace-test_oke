@@ -53,7 +53,7 @@ resource "null_resource" "create_terraform_user" {
       metadata = {
         name = "${local.terraform_user_name}-token"
         annotations = {
-          "kubernetes.io/service-account\\.name" = local.terraform_user_name
+          "kubernetes.io/service-account.name" = local.terraform_user_name
         }
       }
       
