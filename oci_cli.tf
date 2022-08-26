@@ -39,19 +39,18 @@ resource "null_resource" "create_terraform_user" {
   triggers = {
     
     cmd_create_service_account = <<-EOC
-      curl \\
-        -X POST \\
-        '${local.oke_test_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/serviceaccounts' \\
-        
-        --cacert ${local.oke_test_cert_authority_file.filename} \\
-        --header 'Authorization: Bearer ${local.oke_test_token}' \\
-        --header 'Content-Type: application/json' \\
+      curl \
+        -X POST \
+        '${local.oke_test_endpoint}/api/v1/namespaces/${local.terraform_user_namespace}/serviceaccounts' \
+        --cacert ${local.oke_test_cert_authority_file.filename} \
+        --header 'Authorization: Bearer ${local.oke_test_token}' \
+        --header 'Content-Type: application/json' \
         --data '
           {
-            \"apiVersion\": \"\v1\",
-            \"kind\": \"ServiceAccount\",
-            \"metadata\": {
-              \"name\": \"${local.terraform_user_name}\"
+            "apiVersion": "v1",
+            "kind": "ServiceAccount",
+            "metadata": {
+              "name": "${local.terraform_user_name}"
             }
           }
         '
