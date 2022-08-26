@@ -54,7 +54,7 @@ resource "null_resource" "create_terraform_user" {
             \"apiVersion\": \"\v1\",
             \"kind\": \"ServiceAccount\",
             \"metadata\": {
-              \"name\": \"${terraform_user_name}\"
+              \"name\": \"${local.terraform_user_name}\"
             }
           }
         '
