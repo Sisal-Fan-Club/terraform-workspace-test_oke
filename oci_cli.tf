@@ -66,7 +66,7 @@ resource "null_resource" "create_terraform_user" {
       subjects = [{
         kind = "ServiceAccount"
         apiGroup = "rbac.authorization.k8s.io"
-        namespace = local.terraform_namespace
+        namespace = local.terraform_user_namespace
         name = local.terraform_user_name
       }]
     })
