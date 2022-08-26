@@ -24,38 +24,11 @@ data "oci_containerengine_cluster_kube_config" "test_oke_kubeconfig" {
   cluster_id = local.test_oke.id
 }
 
-resource "kubernetes_service_account" "terraform_cloud" {
-  metadata {
-    name = "terraform-cloud"
-    namespace = "kube-system"
-  }
-}
 
-resource "kubernetes_secret" "terraform_cloud" {
-  metadata {
-    name = "${kubernetes_service_account.terraform_cloud.metadata[0].name}-token"
-    namespace = kubernetes_service_account.terraform_cloud.metadata[0].namespace
-    annotations = {
-      "kubernetes.io/service-account.name" = kubernetes_service_account.terraform_cloud.metadata[0].name
-    }
-  }
-  type = "kubernetes.io/service-account-token"
-}
-
-resource "kubernetes_cluster_role_binding" "terraform_cloud" {
-  metadata {
-    name = "terraform_cloud"
-  }
-  
-  role_ref {
-    api_group = "rbac.authorization.k8s.io"
-    kind = "ClusterRole"
-    name = "cluster-admin"
-  }
-  
-  subject {
-    kind = "ServiceAccount"
-    name = kubernetes_service_account.terraform_cloud.metadata[0].name
-    namespace = kubernetes_service_account.terraform_cloud.metadata[0].namespace
+resource "null_resource" "create_terraform_user" {
+  triggers = {
+    kube_api = local.oke_test_endpoint
+    kube_ca = local.oke_test_cert_authority
+    kube_token = local.oke_test_token
   }
 }
